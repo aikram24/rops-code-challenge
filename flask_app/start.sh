@@ -1,5 +1,5 @@
 #!/bin/bash
 cd /tmp/repo/flask_app/
-pip install flask > install.log
-export FLASK_APP=app.py
-flask run > run.log 2>&1
+sudo pip -H install flask > install.log
+#export FLASK_APP=app.py
+python app.py > run.log 2>&1
