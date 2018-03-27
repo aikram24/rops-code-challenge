@@ -102,3 +102,6 @@ ENV/
 
 # pem file
 *.pem
+
+# vs code
+.vscode

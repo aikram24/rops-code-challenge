@@ -85,7 +85,7 @@ runcmd:
 def main():
     parser = argparse.ArgumentParser(description='ReactiveOps Coding Challenge')
     parser.add_argument('-k', '--keyname', help='SSH Key Name', default='OpsKey', required=False)
-    parser.add_argument('-a', '--ami', help='AMI ID', default='ami-5055cd3f', required=False)
+    parser.add_argument('-a', '--ami', help='AMI ID (only ubuntu ami id)', default='ami-5055cd3f', required=False)
     parser.add_argument('-i', '--instancetype', help='Instance Type', default='t2.small', required=False)
     args = parser.parse_args()
     
