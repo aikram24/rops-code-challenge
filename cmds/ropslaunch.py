@@ -105,3 +105,4 @@ def main():
     time.sleep(60)
     print ("Web App: http://{}".format(CREATE_INSTANCE))
     print ("SSH into Server: ssh -i \"{}.pem\" ubuntu@{}".format(KEY_NAME, CREATE_INSTANCE))
+    print ("Note: to ssh in, make sure to set the pem file permission to 400")
