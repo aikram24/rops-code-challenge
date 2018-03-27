@@ -26,6 +26,7 @@ $> rops
 
 
 ## Available Options
+Only pass in Ubuntu AMIs, any other AMI won't be bootstrapped to install / start the application.
 ```
 usage: rops [-h] [-k KEYNAME] [-a AMI] [-i INSTANCETYPE]
 ReactiveOps Coding Challenge
