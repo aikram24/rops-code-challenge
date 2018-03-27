@@ -1,6 +1,8 @@
 import boto3
 import os
 import argparse
+import time
+
 ec2Client = boto3.client('ec2')
 ec2Resource = boto3.resource('ec2')
 
@@ -47,7 +49,6 @@ def genrate_key_pair(key_name):
     file.close() 
 
 def create_instance(ami_id, key_pair, instance_type, sg_id, subnet_id):
-    # user_data = '''#!/bin/bash sudo apt-get install -y git &&  sudo mkdir /opt/app && sudo git clone https://github.com/aikram24/jenkins-pipeline.git /opt/app/'''
     user_data='''
 #cloud-config
 repo_update: true
@@ -57,12 +58,9 @@ packages:
  - python-pip
 
 runcmd:
- - mkdir /tmp/app
- - git clone https://github.com/aikram24/rops-code-challenge.git /tmp/app
- - pip install flask
- - cd /tmp/app
- - export FLASK_APP=app.py
- - flask run -f-host=0.0.0.0 --port=80 > run.log 2>&1 &
+ - mkdir /tmp/repo
+ - git clone https://github.com/aikram24/rops-code-challenge.git /tmp/repo
+ - bash /tmp/repo/flask_app/start.sh &
     '''
     instanceDict = ec2Resource.create_instances(
         ImageId = ami_id,
@@ -99,6 +97,8 @@ def main():
     SG_ID = NETWORK_INFO['sec_group']
     SUBNET_ID = NETWORK_INFO['subnet_id']
     genrate_key_pair(KEY_NAME)
-    CREATE_INSTANCE = create_instance(AMI_ID, KEY_NAME, INSTANCE_TYPE, SG_ID, SUBNET_ID)
+    create_instance(AMI_ID, KEY_NAME, INSTANCE_TYPE, SG_ID, SUBNET_ID)
+    # CREATE_INSTANCE = create_instance(AMI_ID, KEY_NAME, INSTANCE_TYPE, "sg-07ea0d3071dd3e1f7", "subnet-02950b620b4fa3d31")        # Test
+    time.sleep(60)
     print ("Web App: http://{}".format(CREATE_INSTANCE))
-    print ("SSH into Server: ssh -i \"OpsKey.pem\" ubuntu@{}".format(CREATE_INSTANCE))
+    print ("SSH into Server: ssh -i \"{}.pem\" ubuntu@{}".format(KEY_NAME, CREATE_INSTANCE))
