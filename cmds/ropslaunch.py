@@ -85,20 +85,23 @@ runcmd:
 def main():
     parser = argparse.ArgumentParser(description='ReactiveOps Coding Challenge')
     parser.add_argument('-k', '--keyname', help='SSH Key Name', default='OpsKey', required=False)
-    parser.add_argument('-a', '--ami', help='AMI ID', default='ami-ac442ac3', required=False)
+    parser.add_argument('-a', '--ami', help='AMI ID', default='ami-5055cd3f', required=False)
     parser.add_argument('-i', '--instancetype', help='Instance Type', default='t2.small', required=False)
     args = parser.parse_args()
     
     KEY_NAME=args.keyname
     AMI_ID=args.ami
     INSTANCE_TYPE=args.instancetype
+    print("creating network components...")
     NETWORK_INFO = create_network_stack()
     VPC_ID = NETWORK_INFO['vpc_id']
     SG_ID = NETWORK_INFO['sec_group']
     SUBNET_ID = NETWORK_INFO['subnet_id']
+    print("creating key pair...")
     genrate_key_pair(KEY_NAME)
-    create_instance(AMI_ID, KEY_NAME, INSTANCE_TYPE, SG_ID, SUBNET_ID)
-    # CREATE_INSTANCE = create_instance(AMI_ID, KEY_NAME, INSTANCE_TYPE, "sg-07ea0d3071dd3e1f7", "subnet-02950b620b4fa3d31")        # Test
+    print("creating instance...")
+    CREATE_INSTANCE = create_instance(AMI_ID, KEY_NAME, INSTANCE_TYPE, SG_ID, SUBNET_ID)
+    print("please wait while app is getting setup on the instance...")
     time.sleep(60)
     print ("Web App: http://{}".format(CREATE_INSTANCE))
     print ("SSH into Server: ssh -i \"{}.pem\" ubuntu@{}".format(KEY_NAME, CREATE_INSTANCE))
